@@ -11,6 +11,7 @@ const app = express()
 const port = 3000;
 
 app.use(morgan('combined'));
+app.use(express.json());
 app.use(cors());
 
 route(app);
