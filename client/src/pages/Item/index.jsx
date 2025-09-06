@@ -1,4 +1,19 @@
-function item() {
+import axios from 'axios';
+import { useEffect, useState } from 'react'
+
+function Item() {
+
+    const [listItem, setListItems] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/item/getAll')
+            .then((res) => {
+                if (res.data.status) {
+                    setListItems(res.data.data);
+                }
+            })
+    }, [listItem]);
+
     return (
         <div className="row">
             <div className="col-3">
@@ -24,8 +39,29 @@ function item() {
                         <div className="card-header">
                             AAAA
                         </div>
-                        <div className="card-body">
-                            
+                        <div className="card-body row">
+                            {listItem.map((value, key) => {
+                                return (
+                                    <div className="card col-2" key={key}>
+                                        <img className="card-img-top" src={`/dist/img/${value.image}`} style={{ aspectRatio: "1.5 / 1", objectFit: "cover" }} />
+                                        <div className="pd-10 card-body">
+                                            <p>
+                                                <b className='text-primary'>[{value.quantityLeft}]</b> {value.name}
+                                            </p>
+                                            {value.price.toLocaleString('vi-VN')}₫
+                                            <button className={`w-100 btn btn-${value.isStatus ? "success" : "secondary"}`}>{`${value.isStatus ? "Đang Bán" : "Đã Ẩn"}`}</button>
+                                            <div className="text-nowrap text-center mt-1 row g-1">
+                                                <div className="col-6">
+                                                    <button className="btn w-100 btn-primary"><i className="fa-solid fa-pen-to-square"></i></button>
+                                                </div>
+                                                <div className="col-6">
+                                                    <button className="btn w-100 btn-danger"><i className="fa-solid fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
@@ -34,4 +70,4 @@ function item() {
     );
 }
 
-export default item;
+export default Item;

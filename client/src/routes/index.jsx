@@ -33,18 +33,18 @@ const publicRoutes = createBrowserRouter([
                                 element: <Product />,
                                 handle: { title: "Sản Phẩm" },
                             },
-                            {
-                                path: 'item',
-                                children: [
-                                    {
-                                        index: true,
-                                        element: <ItemPage />,
-                                        handle: { title: "Mặt Hàng" },
-                                    }
-                                ]
-                            }
                         ]
                     },
+                    {
+                        path: 'item',
+                        children: [
+                            {
+                                index: true,
+                                element: <ItemPage />,
+                                handle: { title: "Mặt Hàng" },
+                            }
+                        ]
+                    }
                 ],
             },
         ],

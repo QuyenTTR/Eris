@@ -25,18 +25,16 @@ function Sidebar() {
                         data-accordion="false">
                         <li className="nav-item">
                             <a href="" className="nav-link">
-                                <Link to="/admin/product">
-                                    <i class="fa-solid fa-box-open mr-2"></i>
-                                    Sản Phẩm
-                                </Link>
+                                <i className="fa-solid fa-box-open mr-2"></i>
+                                Sản Phẩm
                                 <p>
                                     <i className="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <Link to="/admin/product/item" className="nav-link">
-                                        <i class="fa-solid fa-bowl-food mr-2 ml-2"></i>
+                                    <Link to="/admin/item" className="nav-link">
+                                        <i className="fa-solid fa-bowl-food mr-2 ml-2"></i>
                                         <p>Mặt Hàng</p>
                                     </Link>
                                 </li>
