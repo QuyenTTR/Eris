@@ -4,7 +4,8 @@ import mongooseDelete from 'mongoose-delete';
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-const Item = new Schema({
+const Item = new Schema(
+  {
     id: ObjectId,
     name: { type: String, minLength: 3, maxLength: 50, required: true },
     price: { type: Number, required: true },
@@ -12,9 +13,11 @@ const Item = new Schema({
     categoryId: { type: String, required: true },
     isStatus: { type: Number, default: 1 },
     quantityLeft: { type: Number, min: 0, default: 0 },
-}, {
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // Item.plugin(mongooseDelete, {
 //     deletedAt: true,
