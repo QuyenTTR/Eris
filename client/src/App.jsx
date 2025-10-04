@@ -1,32 +1,33 @@
-import { ToastContainer, Zoom } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { Button } from "react-bootstrap";
 
-import { publicRoutes } from "./routes";
+import "./App.css";
+
+import routes from "./routes";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <Button variant="danger">Primary</Button>
+      {/* <BrowserRouter>
         <Routes>
-          {publicRoutes.map((value, key) => {
+          {routes.map((value, key) => {
             const Page = value.component;
-            return <Route key={key} path={value.path} element={<Page />} />;
+            const Layout = value.layout || (({ children }) => <>{children}</>);
+            return (
+              <Route
+                key={key}
+                path={value.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            );
           })}
         </Routes>
-      </BrowserRouter>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        stacked
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Zoom}
-      />
+      </BrowserRouter> */}
     </>
   );
 }

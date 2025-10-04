@@ -1,12 +1,14 @@
-import Home from "../pages/admin/Home";
+import AdminHomePage from "../pages/admin/Home";
 
-const publicRoutes = [
+import AdminLayout from "../layout/AdminLayout";
+
+const routes = [
   {
-    path: "/admin",
-    component: Home,
+    path: "/",
+    component: AdminHomePage,
+    layout: AdminLayout,
   },
+  {},
 ];
 
-const privateRoutes = [];
-
-export { publicRoutes, privateRoutes };
+export default routes;
