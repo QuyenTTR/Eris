@@ -1,19 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import { Button } from "react-bootstrap";
-
-import "./App.css";
 
 import routes from "./routes";
+
+import DefaultLayout from "./layout/DefaultLayout";
 
 function App() {
   return (
     <>
-      <Button variant="danger">Primary</Button>
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           {routes.map((value, key) => {
             const Page = value.component;
-            const Layout = value.layout || (({ children }) => <>{children}</>);
+            const Layout = value.layout || DefaultLayout;
             return (
               <Route
                 key={key}
@@ -27,7 +25,7 @@ function App() {
             );
           })}
         </Routes>
-      </BrowserRouter> */}
+      </BrowserRouter>
     </>
   );
 }
