@@ -33,6 +33,7 @@ const data = {
         {
           title: "Mặt Hàng",
           url: "/product/item",
+          isActive: true,
         },
         {
           title: "Danh Mục",
