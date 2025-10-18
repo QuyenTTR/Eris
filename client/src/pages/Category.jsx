@@ -70,7 +70,13 @@ function Category() {
         getCategories();
         setOpenDialogCreate(false);
         setNewCategory({ name: "", parentId: null });
-        return `Tạo danh mục ${category.name} thành công`;
+        return (
+          <>
+            Tạo danh mục{" "}
+            <span className="text-info font-semibold">{category.name}</span>{" "}
+            thành công
+          </>
+        );
       },
       error: (err) => err.response.data.message,
     });
@@ -83,7 +89,13 @@ function Category() {
         getCategories();
         setOpenDialogUpdate(false);
         setEditCategory({ name: "", parentId: null });
-        return `Cập nhật danh mục ${category.name} thành công`;
+        return (
+          <>
+            Cập nhật danh mục{" "}
+            <span className="text-info font-semibold">{category.name}</span>{" "}
+            thành công
+          </>
+        );
       },
       error: (err) => err.response.data.message,
     });
@@ -142,6 +154,7 @@ function Category() {
                   <SelectContent>
                     <SelectItem value={null}>— Không có —</SelectItem>
                     {listCategories.map((value, key) => {
+                      if (value.parentId) return;
                       return (
                         <SelectItem key={key} value={value._id}>
                           {value.name}
@@ -274,13 +287,19 @@ function Category() {
                                 <SelectItem value={null}>
                                   — Không có —
                                 </SelectItem>
-                                {listCategories.map((value, key) => {
-                                  return (
-                                    <SelectItem key={key} value={value._id}>
-                                      {value.name}
-                                    </SelectItem>
-                                  );
-                                })}
+                                {listCategories
+                                  .filter((v) => {
+                                    return (
+                                      !v.parentId && v._id != editCategory._id
+                                    );
+                                  })
+                                  .map((v, k) => {
+                                    return (
+                                      <SelectItem key={k} value={v._id}>
+                                        {v.name}
+                                      </SelectItem>
+                                    );
+                                  })}
                               </SelectContent>
                             </Select>
                           </div>
