@@ -14,12 +14,17 @@ class CategoryController {
   async create(req, res) {
     try {
       const data = req.body;
+      if (!data.name || data.name.trim() === "") {
+        return res.status(400).json({ message: "Tên danh mục không được để trống" });
+      }
+      if (data.name.length > 50) {
+        return res.status(400).json({ message: "Tên danh mục không được vượt quá 50 ký tự" });
+      }
+
       const newCategory = new Category(data);
       await newCategory.save();
 
-      res
-        .status(201)
-        .json({ message: "Tạo danh mục thành công", category: newCategory });
+      res.status(201).json({ message: "Tạo danh mục thành công", category: newCategory });
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi tạo danh mục" });
       console.error("Lỗi khi gọi create:", error);
@@ -29,13 +34,9 @@ class CategoryController {
   async update(req, res) {
     try {
       const data = req.body;
-      const updatedCategory = await Category.findByIdAndUpdate(
-        req.params.id,
-        data,
-        {
-          new: true,
-        }
-      );
+      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, data, {
+        new: true,
+      });
 
       if (!updatedCategory) {
         return res.status(404).json({ message: "Danh mục không tồn tại" });

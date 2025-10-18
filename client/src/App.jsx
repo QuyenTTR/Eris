@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { ToastContainer, Bounce } from "react-toastify";
+import { Toaster } from "@/components/ui/sonner";
 
 import routes from "./routes";
 
@@ -27,7 +28,8 @@ function App() {
           })}
         </Routes>
       </BrowserRouter>
-      <ToastContainer
+      <Toaster />
+      {/* <ToastContainer
         position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -40,7 +42,7 @@ function App() {
         theme="light"
         transition={Bounce}
         stacked
-      />
+      /> */}
     </>
   );
 }
