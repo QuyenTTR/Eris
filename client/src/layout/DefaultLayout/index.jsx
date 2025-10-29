@@ -14,7 +14,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-function AdminLayout({ children }) {
+function DefaultLayout({ children }) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -47,4 +47,4 @@ function AdminLayout({ children }) {
   );
 }
 
-export default AdminLayout;
+export default DefaultLayout;

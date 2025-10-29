@@ -17,7 +17,7 @@ app.use("/api", routes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Đã có lỗi xảy ra!" });
+  res.status(500).json({ message: "Lỗi hệ thống!" });
 });
 
 connectDB()

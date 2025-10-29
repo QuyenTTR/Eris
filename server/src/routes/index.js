@@ -1,9 +1,11 @@
 import express from "express";
 
-import categoriesRouter from "./categoriesRouters/index.js";
+import categoriesRoute from "./categoriesRoute/index.js";
+import authRoute from "./authRoute/index.js";
 
 const router = express.Router();
 
-router.use("/category", categoriesRouter);
+router.use("/category", categoriesRoute);
+router.use("/auth", authRoute);
 
 export default router;

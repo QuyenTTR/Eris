@@ -100,7 +100,7 @@
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: #2e3650;
   --sidebar-accent-foreground: #fff;
-  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-border: #4c5680;
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 

@@ -27,17 +27,17 @@ const data = {
   navMain: [
     {
       title: "Sản Phẩm",
-      url: "/product",
       icon: Archive,
+
       items: [
         {
           title: "Mặt Hàng",
           url: "/product/item",
-          isActive: true,
         },
         {
           title: "Danh Mục",
           url: "/product/category",
+          isActive: true,
         },
       ],
     },
@@ -68,8 +68,10 @@ export function AppSidebar({ ...props }) {
                   <Command className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-medium">Eris</span>
+                  <span className="truncate text-xs">
+                    Giải pháp vận hành phòng game
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>
