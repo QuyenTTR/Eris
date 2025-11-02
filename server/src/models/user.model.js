@@ -15,13 +15,14 @@ const User = new Schema(
       required: true,
       trim: true,
       lowercase: true,
+      maxlength: 100,
     },
     username: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      maxlength: 50,
+      maxlength: 100,
     },
     hashedPassword: {
       type: String,

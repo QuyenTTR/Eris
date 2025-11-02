@@ -3,10 +3,11 @@ import express from "express";
 import AuthController from "../../controllers/auth.controller.js";
 
 import validate from "../../middlewares/validate.middleware.js";
-import userValidation from "../../validations/user.validation.js";
+import authValidation from "../../validations/auth.validation.js";
 
 const router = express.Router();
 
-router.post("/signup", validate(userValidation.signUp), AuthController.signUp);
+router.post("/signup", validate(authValidation.signUp), AuthController.signUp);
+router.post("/signin", validate(authValidation.signIn), AuthController.signIn);
 
 export default router;
