@@ -16,8 +16,7 @@ function protectedRoute(req, res, next) {
 
     jwt.verify(token, process.env.ACCESS_SECRET, async (err, decoded) => {
       if (err) {
-        console.log(err);
-        return res.status(403).json({ message: "Token không hợp lệ" });
+        return res.status(403).json({ message: "Token hết hạn hoặc không đúng" });
       }
 
       const user = await User.findById(decoded.userId).select("-hashedPassword");
