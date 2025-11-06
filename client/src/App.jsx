@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import routes from "./routes";
 
-import DefaultLayout from "./layout/DefaultLayout";
+import DefaultLayout from "./components/layouts/DefaultLayout";
 
 function App() {
   return (

@@ -1,34 +1,33 @@
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
-function protectedRoute(req, res, next) {
+async function protectedRoute(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Không có quyền truy cập" });
+  }
+  const token = authHeader.split(" ")[1];
+
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "Không có quyền truy cập" });
+    const decoded = verifyAccessToken(token);
+    if (!decoded) {
+      return res.status(401).json({ message: "Token không hợp lệ" });
     }
 
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ message: "Không có quyền truy cập" });
+    const user = await User.findById(decoded.userId).select("-hashedPassword");
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
-    jwt.verify(token, process.env.ACCESS_SECRET, async (err, decoded) => {
-      if (err) {
-        return res.status(403).json({ message: "Token hết hạn hoặc không đúng" });
-      }
-
-      const user = await User.findById(decoded.userId).select("-hashedPassword");
-      if (!user) {
-        return res.status(404).json({ message: "Người dùng không tồn tại" });
-      }
-
-      req.user = user;
-      next();
-    });
+    req.user = user;
+    next();
   } catch (error) {
-    res.status(500).json({ message: "Lỗi khi kiểm tra quyền truy cập" });
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: "Token đã hết hạn" });
+    }
+    res.status(500).json({ message: "Token không hợp lệ" });
     console.error("Lỗi khi gọi protectedRoute:", error);
   }
 }

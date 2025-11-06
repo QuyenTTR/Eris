@@ -5,13 +5,17 @@ import {
   User,
   UserLock,
 } from "lucide-react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+import authService from "@/services/auth.service";
 
 const signUpSchema = z
   .object({
@@ -41,8 +45,24 @@ function Register() {
   });
 
   function onSubmit(data) {
-    const { confirmPassword, ...rest } = data;
-    console.log(rest);
+    setLoading(true);
+    const { confirmPassword, ...payload } = data;
+
+    authService
+      .register(payload)
+      .then(() => {
+        toast.success("Đăng ký thành công");
+        navigate("/login");
+      })
+      .catch((err) => {
+        toast.error(
+          err.response.data.message ||
+            "Đã có lỗi xảy ra trong quá trình đăng ký",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -177,11 +197,7 @@ function Register() {
             </p>
           )}
         </div>
-        <Button
-          type="submit"
-          // disable={isSubmitting}
-          className="mt-4 h-11 w-full"
-        >
+        <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
           Đăng Ký Tài Khoản
         </Button>
       </form>

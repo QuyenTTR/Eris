@@ -5,7 +5,7 @@ import Product from "@/pages/Product";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 
-import AuthLayout from "@/layout/AuthLayout";
+import AuthLayout from "@/components/layouts/AuthLayout";
 
 const routes = [
   {

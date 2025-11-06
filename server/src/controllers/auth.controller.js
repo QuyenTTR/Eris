@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 import User from "../models/user.model.js";
-import Session from "../models/session.model.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 
 const ACCESS_TOKEN_EXPIRES_IN = "15m";
 const REFRESH_TOKEN_EXPIRES_IN = 1000 * 60 * 60 * 24 * 30;
@@ -41,38 +41,48 @@ class AuthController {
       const user = await User.findOne({
         $or: [{ username: login }, { email: login }],
       });
-      if (!user) {
-        return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
-      }
-
       const isMatch = await bcrypt.compare(password, user.hashedPassword);
-      if (!isMatch) {
+
+      if (!user || !isMatch) {
         return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
       }
 
-      const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_SECRET, {
-        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-      });
-
-      const refreshToken = crypto.randomBytes(256).toString("base64url");
-
-      await Session.create({
-        userId: user._id,
-        refreshToken,
-        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN),
-      });
+      const accessToken = signAccessToken({ userId: user._id });
+      const refreshToken = signRefreshToken({ userId: user._id });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: REFRESH_TOKEN_EXPIRES_IN,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       });
 
-      res.status(200).json({ message: `Người dùng ${login} đăng nhập thành công`, accessToken });
+      res.status(200).json({
+        message: `Đăng nhập thành công`,
+        accessToken,
+      });
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi đăng nhập" });
       console.error("Lỗi khi gọi signIn:", error);
+    }
+  }
+
+  async refreshToken(req, res) {
+    try {
+      const token = req.cookies?.refreshToken;
+
+      if (!token) {
+        return res.status(401).json({ message: "Không có refresh token" });
+      }
+
+      const decoded = verifyRefreshToken(token);
+
+      const accessToken = signAccessToken({ userId: decoded.userId });
+
+      res.status(200).json({ accessToken });
+    } catch (error) {
+      res.status(500).json({ message: "Lỗi khi làm mới token" });
+      console.error("Lỗi khi gọi refreshToken:", error);
     }
   }
 
@@ -80,7 +90,6 @@ class AuthController {
     try {
       const { refreshToken } = req.cookies;
       if (refreshToken) {
-        await Session.deleteOne({ refreshToken });
         res.clearCookie("refreshToken");
       }
 

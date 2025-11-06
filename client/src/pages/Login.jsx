@@ -5,24 +5,59 @@ import {
   User,
   UserLock,
 } from "lucide-react";
+import { set, z } from "zod";
+import { Link, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import authService from "@/services/auth.service";
+
+const signInSchema = z.object({
+  login: z.string().trim().max(100),
+  password: z.string().min(8, "Phải có ít nhất 8 ký tự").max(100),
+});
 
 function Login() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signInSchema),
+  });
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  function onSubmit(data) {
+    setLoading(true);
+
+    authService
+      .login(data)
+      .then(() => {
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Đăng nhập thất bại");
+        setLoading(false);
+      });
+  }
+
   return (
     <>
       <h1 className="text-center text-3xl font-medium text-slate-900">
         Đăng Nhập
       </h1>
 
-      <form className="mt-6 space-y-4">
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label
-            htmlFor="username"
-            className="block font-medium text-slate-700"
-          >
+          <label htmlFor="login" className="block font-medium text-slate-700">
             Tên Đăng Nhập
           </label>
 
@@ -31,8 +66,8 @@ function Login() {
               <UserLock className="h-5 w-5 text-gray-400" />
             </span>
             <Input
-              id="username"
-              name="username"
+              id="login"
+              {...register("login")}
               type="text"
               required
               placeholder="Nhập tên tài khoản để đăng nhập"
@@ -54,7 +89,7 @@ function Login() {
             </span>
             <Input
               id="password"
-              name="password"
+              {...register("password")}
               type="password"
               required
               placeholder="Nhập mật khẩu của bạn"
@@ -62,7 +97,7 @@ function Login() {
             />
           </div>
         </div>
-        <Button type="submit" className="mt-4 h-11 w-full">
+        <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
           Đăng Nhập
         </Button>
       </form>
