@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import { ToastContainer, Bounce } from "react-toastify";
 import { Toaster } from "@/components/ui/sonner";
 
 import routes from "./routes";
@@ -19,7 +18,7 @@ function App() {
                 key={key}
                 path={value.path}
                 element={
-                  <Layout>
+                  <Layout {...value}>
                     <Page />
                   </Layout>
                 }

@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
-import { verifyAccessToken } from "../utils/jwt.js";
 
 async function protectedRoute(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -11,7 +10,7 @@ async function protectedRoute(req, res, next) {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = verifyAccessToken(token);
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
     if (!decoded) {
       return res.status(401).json({ message: "Token không hợp lệ" });
     }

@@ -1,17 +1,16 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
 
 import User from "../models/user.model.js";
-import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
+import Session from "../models/session.model.js";
 
 const ACCESS_TOKEN_EXPIRES_IN = "15m";
-const REFRESH_TOKEN_EXPIRES_IN = 1000 * 60 * 60 * 24 * 30;
+const REFRESH_TOKEN_EXPIRES_IN = 30 * 24 * 60 * 60 * 1000;
 
 class AuthController {
-  async signUp(req, res) {
+  async register(req, res) {
     try {
-      let { fullname, email, username, password } = req.body;
+      const { fullname, email, username, password } = req.body;
 
       const hasEmail = await User.findOne({ email });
       if (hasEmail) {
@@ -34,27 +33,41 @@ class AuthController {
     }
   }
 
-  async signIn(req, res) {
+  async login(req, res) {
     try {
-      let { login, password } = req.body;
+      const { login, password } = req.body;
 
       const user = await User.findOne({
         $or: [{ username: login }, { email: login }],
       });
-      const isMatch = await bcrypt.compare(password, user.hashedPassword);
-
-      if (!user || !isMatch) {
+      if (!user) {
         return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
       }
 
-      const accessToken = signAccessToken({ userId: user._id });
-      const refreshToken = signRefreshToken({ userId: user._id });
+      const isMatch = await bcrypt.compare(password, user.hashedPassword);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
+      }
+
+      const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_SECRET, {
+        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+      });
+      const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_SECRET, {
+        expiresIn: REFRESH_TOKEN_EXPIRES_IN / 1000,
+      });
+
+      await Session.deleteMany({ userId: user._id });
+      await Session.create({
+        userId: user._id,
+        refreshToken,
+        expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN),
+      });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: REFRESH_TOKEN_EXPIRES_IN,
       });
 
       res.status(200).json({
@@ -69,15 +82,17 @@ class AuthController {
 
   async refreshToken(req, res) {
     try {
-      const token = req.cookies?.refreshToken;
+      const { refreshToken } = req.cookies;
 
-      if (!token) {
+      if (!refreshToken) {
         return res.status(401).json({ message: "Không có refresh token" });
       }
 
-      const decoded = verifyRefreshToken(token);
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 
-      const accessToken = signAccessToken({ userId: decoded.userId });
+      const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_SECRET, {
+        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+      });
 
       res.status(200).json({ accessToken });
     } catch (error) {
@@ -86,10 +101,11 @@ class AuthController {
     }
   }
 
-  async signOut(req, res) {
+  async logout(req, res) {
     try {
       const { refreshToken } = req.cookies;
       if (refreshToken) {
+        await Session.findOneAndDelete({ refreshToken });
         res.clearCookie("refreshToken");
       }
 

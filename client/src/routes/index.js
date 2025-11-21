@@ -16,11 +16,13 @@ const routes = [
     path: "/login",
     component: Login,
     layout: AuthLayout,
+    title: "Đăng Nhập",
   },
   {
     path: "/register",
     component: Register,
     layout: AuthLayout,
+    title: "Tạo Tài Khoản",
   },
   {
     path: "/product",
