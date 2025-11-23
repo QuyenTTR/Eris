@@ -7,10 +7,10 @@ async function protectedRoute(req, res, next) {
   if (!authorization?.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Không có quyền truy cập" });
   }
-  const token = authorization.split(" ")[1];
+  const accessToken = authorization.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_SECRET);
     if (!decoded) {
       return res.status(401).json({ message: "Token không hợp lệ" });
     }

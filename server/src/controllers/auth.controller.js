@@ -79,27 +79,6 @@ class AuthController {
     }
   }
 
-  async refreshToken(req, res) {
-    try {
-      const { refreshToken } = req.cookies;
-
-      if (!refreshToken) {
-        return res.status(401).json({ message: "Không có refresh token" });
-      }
-
-      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
-
-      const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_SECRET, {
-        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-      });
-
-      res.status(200).json({ accessToken });
-    } catch (error) {
-      res.status(500).json({ message: "Lỗi khi làm mới token" });
-      console.error("Lỗi khi gọi refreshToken:", error);
-    }
-  }
-
   async logout(req, res) {
     try {
       const { refreshToken } = req.cookies;
@@ -112,6 +91,37 @@ class AuthController {
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi đăng xuất" });
       console.error("Lỗi khi gọi signOut:", error);
+    }
+  }
+
+  async refreshToken(req, res) {
+    try {
+      const { refreshToken } = req.cookies;
+      if (!refreshToken) {
+        return res.status(401).json({ message: "Không có refresh token" });
+      }
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+
+      const session = await Session.findOne({ refreshToken });
+      if (!session) {
+        return res.status(401).json({ message: "Phiên không hợp lệ" });
+      }
+
+      if (session.expiresAt < new Date()) {
+        return res.status(401).json({ message: "Phiên đã hết hạn, vui lòng đăng nhập lại" });
+      }
+
+      const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_SECRET, {
+        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+      });
+
+      res.status(200).json({ accessToken });
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        return res.status(401).json({ message: "Phiên không hợp lệ" });
+      }
+      res.status(500).json({ message: "Lỗi khi làm mới token" });
+      console.error("Lỗi khi gọi refreshToken:", error);
     }
   }
 }

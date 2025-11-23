@@ -85,6 +85,26 @@ const useAuthStore = create((set, get) => ({
       set({ loading: false });
     }
   },
+
+  refresh: async () => {
+    try {
+      set({ loading: true });
+      const {
+        data: { accessToken },
+      } = await authService.refreshToken();
+      set({ accessToken });
+      return true;
+    } catch (error) {
+      get().clearState();
+      toast.error(
+        error.response?.data?.message ||
+          "Phiên đã hết hạn, vui lòng đăng nhập lại",
+      );
+      return false;
+    } finally {
+      set({ loading: false });
+    }
+  },
 }));
 
 export default useAuthStore;

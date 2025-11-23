@@ -5,6 +5,7 @@ const authService = {
   login: (data) => api.post("/auth/login", data),
   logout: () => api.post("/auth/logout"),
   getMe: () => api.get("/user/me"),
+  refreshToken: () => api.post("/auth/refresh-token"),
 };
 
 export default authService;

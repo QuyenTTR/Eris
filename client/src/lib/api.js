@@ -6,12 +6,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// api.interceptors.request.use((config) => {
-//   const { accessToken } = useAuthStore.getState();
-//   if (accessToken) {
-//     config.headers.Authorization = `Bearer ${accessToken}`;
-//   }
-//   return config;
-// });
+api.interceptors.request.use((config) => {
+  const { accessToken } = useAuthStore.getState();
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+});
 
 export default api;
