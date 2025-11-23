@@ -1,5 +1,11 @@
+import Test from "./Test";
+
 function Home() {
-  return <>Đây là home page</>;
+  return (
+    <>
+      <Test></Test>
+    </>
+  );
 }
 
 export default Home;

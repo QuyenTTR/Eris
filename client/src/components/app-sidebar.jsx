@@ -5,7 +5,7 @@ import { Archive, Command, LifeBuoy, Send } from "lucide-react";
 import { Link } from "react-router";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
+// import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -17,46 +17,50 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Sản Phẩm",
-      icon: Archive,
-
-      items: [
-        {
-          title: "Mặt Hàng",
-          url: "/product/item",
-        },
-        {
-          title: "Danh Mục",
-          url: "/product/category",
-          isActive: true,
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-};
+import useAuthStore from "@/stores/useAuth.store";
 
 export function AppSidebar({ ...props }) {
+  const { fullname, email, username, avatarUrl } = useAuthStore(
+    (state) => state.user,
+  );
+
+  const data = {
+    user: {
+      name: fullname,
+      email,
+      avatar: avatarUrl,
+      username,
+    },
+    navMain: [
+      {
+        title: "Sản phẩm",
+        icon: Archive,
+
+        items: [
+          {
+            title: "Mặt hàng",
+            url: "/product/item",
+          },
+          {
+            title: "Danh mục",
+            url: "/product/category",
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Hỗ trợ",
+        url: "#",
+        icon: LifeBuoy,
+      },
+      {
+        title: "Góp ý phát triển",
+        url: "#",
+        icon: Send,
+      },
+    ],
+  };
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -67,11 +71,8 @@ export function AppSidebar({ ...props }) {
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Command className="size-4" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Eris</span>
-                  <span className="truncate text-xs">
-                    Giải pháp vận hành phòng game
-                  </span>
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="truncate text-lg font-medium">Eris</span>
                 </div>
               </Link>
             </SidebarMenuButton>

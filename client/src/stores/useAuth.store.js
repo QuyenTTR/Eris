@@ -93,6 +93,7 @@ const useAuthStore = create((set, get) => ({
         data: { accessToken },
       } = await authService.refreshToken();
       set({ accessToken });
+      await get().getMe();
       return true;
     } catch (error) {
       get().clearState();
