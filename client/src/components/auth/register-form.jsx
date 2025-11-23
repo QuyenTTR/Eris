@@ -4,8 +4,9 @@ import {
   Mail,
   User,
   UserLock,
+  LoaderCircle,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,9 +15,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/stores/useAuth.store";
 
-const signUpSchema = z
+const registerSchema = z
   .object({
-    fullname: z.string().trim().min(4, "Phải có ít nhất 4 ký tự").max(100),
+    fullname: z
+      .string()
+      .trim()
+      .min(1, "Họ và tên không được để trống")
+      .max(100),
     email: z.string().trim().email("Email không hợp lệ").max(100),
     username: z
       .string()
@@ -32,18 +37,22 @@ const signUpSchema = z
   });
 
 function RegisterForm() {
-  const { registerUser } = useAuthStore();
+  const navigate = useNavigate();
+  const { registerUser, loading } = useAuthStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(registerSchema),
   });
 
-  function onSubmit(data) {
+  async function onSubmit(data) {
     const { fullname, email, username, password } = data;
-    registerUser({ fullname, email, username, password });
+    const success = await registerUser({ fullname, email, username, password });
+    if (success) {
+      navigate("/login");
+    }
   }
 
   return (
@@ -174,8 +183,12 @@ function RegisterForm() {
             </p>
           )}
         </div>
-        <Button type="submit" className="mt-4 h-11 w-full">
-          Đăng Ký Tài Khoản
+        <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
+          {loading ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            "Đăng Ký Tài Khoản"
+          )}
         </Button>
       </form>
 

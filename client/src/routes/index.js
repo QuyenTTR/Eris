@@ -17,12 +17,14 @@ const routes = [
     component: Login,
     layout: AuthLayout,
     title: "Đăng Nhập",
+    public: true,
   },
   {
     path: "/register",
     component: Register,
     layout: AuthLayout,
     title: "Tạo Tài Khoản",
+    public: true,
   },
   {
     path: "/product",

@@ -23,9 +23,18 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useNavigate } from "react-router";
+import useAuthStore from "@/stores/useAuth.store";
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
+  const { logoutUser } = useAuthStore();
+
+  async function handleLogout() {
+    await logoutUser();
+    navigate("/login");
+  }
 
   return (
     <SidebarMenu>
@@ -88,9 +97,9 @@ export function NavUser({ user }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Log out
+              Đăng xuất
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

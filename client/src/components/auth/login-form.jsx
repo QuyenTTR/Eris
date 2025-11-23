@@ -3,50 +3,47 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import authService from "@/services/auth.service";
+import useAuthStore from "@/stores/useAuth.store";
 
-const signInSchema = z.object({
-  login: z.string().trim().max(100),
+const loginSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, "Tên đăng nhập không được để trống")
+    .max(100),
   password: z.string().min(8, "Phải có ít nhất 8 ký tự").max(100),
 });
 
 function LoginForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(loginSchema),
   });
+  const { loginUser, loading } = useAuthStore();
 
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  function onSubmit(data) {
-    setLoading(true);
-
-    authService
-      .login(data)
-      .then(() => {
-        setLoading(false);
-        navigate("/");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message || "Đăng nhập thất bại");
-        setLoading(false);
-      });
+  async function onSubmit(data) {
+    const { username, password } = data;
+    const success = await loginUser({ login: username, password });
+    if (success) {
+      navigate("/");
+    }
   }
 
   return (
     <>
       <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="login" className="block font-medium text-slate-700">
+          <label
+            htmlFor="username"
+            className="block font-medium text-slate-700"
+          >
             Tên Đăng Nhập
           </label>
 
@@ -55,14 +52,18 @@ function LoginForm() {
               <UserLock className="h-5 w-5 text-gray-400" />
             </span>
             <Input
-              id="login"
-              {...register("login")}
+              id="username"
+              {...register("username")}
               type="text"
-              required
               placeholder="Nhập tên tài khoản để đăng nhập"
               className="px-10"
             />
           </div>
+          {errors.username && (
+            <p className="text-destructive mb-1 text-sm">
+              {errors.username.message}
+            </p>
+          )}
         </div>
         <div>
           <label
@@ -80,11 +81,15 @@ function LoginForm() {
               id="password"
               {...register("password")}
               type="password"
-              required
               placeholder="Nhập mật khẩu của bạn"
               className="px-10"
             />
           </div>
+          {errors.password && (
+            <p className="text-destructive mb-1 text-sm">
+              {errors.password.message}
+            </p>
+          )}
         </div>
         <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
           Đăng Nhập

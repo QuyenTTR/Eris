@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const signUp = z.object({
-  fullname: z.string().trim().min(4).max(100),
+  fullname: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(100),
   username: z
     .string()
@@ -15,7 +15,7 @@ const signIn = z.object({
   login: z
     .string()
     .trim()
-    .min(8)
+    .min(1)
     .max(100)
     .regex(/^[^\s]+$/),
   password: z.string().min(8).max(100),

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import Session from "../models/session.model.js";
 
-const ACCESS_TOKEN_EXPIRES_IN = "15m";
+const ACCESS_TOKEN_EXPIRES_IN = "15s";
 const REFRESH_TOKEN_EXPIRES_IN = 30 * 24 * 60 * 60 * 1000;
 
 class AuthController {
@@ -71,7 +71,6 @@ class AuthController {
       });
 
       res.status(200).json({
-        message: `Đăng nhập thành công`,
         accessToken,
       });
     } catch (error) {
