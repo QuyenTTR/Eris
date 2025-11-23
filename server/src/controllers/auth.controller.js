@@ -26,7 +26,7 @@ class AuthController {
       const user = new User({ fullname, email, username, hashedPassword });
       await user.save();
 
-      res.sendStatus(204);
+      res.status(201).json({ message: "Đăng ký thành công", user });
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi đăng ký" });
       console.error("Lỗi khi gọi signUp:", error);
@@ -71,6 +71,7 @@ class AuthController {
       });
 
       res.status(200).json({
+        message: "Đăng nhập thành công",
         accessToken,
       });
     } catch (error) {

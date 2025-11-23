@@ -4,7 +4,7 @@ class CategoryController {
   async getAll(req, res) {
     try {
       const categories = await Category.find().sort({ createdAt: -1 });
-      res.status(200).json(categories);
+      res.status(200).json({ categories });
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi lấy danh sách danh mục" });
       console.error("Lỗi khi gọi getAll:", error);
@@ -13,9 +13,9 @@ class CategoryController {
 
   async create(req, res) {
     try {
-      const data = req.body;
+      const { name, isStatus } = req.body;
 
-      const newCategory = new Category(data);
+      const newCategory = new Category({ name, isStatus });
       await newCategory.save();
 
       res.status(201).json({ message: "Tạo danh mục thành công", category: newCategory });
@@ -27,11 +27,15 @@ class CategoryController {
 
   async update(req, res) {
     try {
-      const data = req.body;
+      const { name, isStatus } = req.body;
 
-      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, data, {
-        new: true,
-      });
+      const updatedCategory = await Category.findByIdAndUpdate(
+        req.params.id,
+        { name, isStatus },
+        {
+          new: true,
+        }
+      );
 
       if (!updatedCategory) {
         return res.status(404).json({ message: "Danh mục không tồn tại" });
