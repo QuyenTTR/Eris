@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import CategoryDeleteForm from "@/components/category/category-deleteForm";
 import CategoryUpdateForm from "@/components/category/category-updateForm";
-import CategoryToggleStatus from "./category-toggleStatus";
+import CategoryToggleStatus from "@/components/category/category-toggleStatus";
 
 function CategoryTable({ categories }) {
   return (
@@ -25,7 +25,7 @@ function CategoryTable({ categories }) {
         </TableHeader>
         <TableBody>
           {categories.map((category, index) => (
-            <TableRow key={index}>
+            <TableRow key={category._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell className="max-w-xs break-words whitespace-normal">
                 {category.name}

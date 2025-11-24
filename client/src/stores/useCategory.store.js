@@ -24,11 +24,9 @@ const useCategoryStore = create((set, get) => ({
   createCategory: async (data) => {
     set({ loading: true });
     try {
-      const { category: newCategory, message } =
-        await categoryService.create(data);
-      set((state) => ({
-        categories: [newCategory, ...state.categories],
-      }));
+      const { message } = await categoryService.create(data);
+      get().getAllCategories();
+
       toast.success(message);
       return true;
     } catch (error) {
@@ -42,13 +40,9 @@ const useCategoryStore = create((set, get) => ({
   updateCategory: async (id, data) => {
     set({ loading: true });
     try {
-      const { category: updatedCategory, message } =
-        await categoryService.update(id, data);
-      set((state) => ({
-        categories: state.categories.map((category) =>
-          category._id === id ? updatedCategory : category,
-        ),
-      }));
+      const { message } = await categoryService.update(id, data);
+      get().getAllCategories();
+
       toast.success(message);
       return true;
     } catch (error) {
@@ -69,15 +63,12 @@ const useCategoryStore = create((set, get) => ({
         throw new Error("Danh mục không tồn tại");
       }
       const newStatus = !category.isStatus * 1;
-      const { category: updatedCategory } = await categoryService.update(id, {
+      await categoryService.update(id, {
         ...category,
         isStatus: newStatus,
       });
-      set((state) => ({
-        categories: state.categories.map((category) =>
-          category._id === id ? updatedCategory : category,
-        ),
-      }));
+      get().getAllCategories();
+
       toast.success("Cập nhật trạng thái thành công");
       return true;
     } catch (error) {
@@ -95,9 +86,9 @@ const useCategoryStore = create((set, get) => ({
     set({ loading: true });
     try {
       const { message } = await categoryService.delete(id);
-      set((state) => ({
-        categories: state.categories.filter((category) => category._id !== id),
-      }));
+
+      get().getAllCategories();
+
       toast.success(message);
       return true;
     } catch (error) {
