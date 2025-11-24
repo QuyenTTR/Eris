@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import useCategoryStore from "@/stores/useCategory.store";
 
 function CategoryToggleStatus({ category }) {
-  const { toggleCategoryStatus, loading } = useCategoryStore.getState();
+  const { toggleCategoryStatus } = useCategoryStore.getState();
   function onSubmit() {
     toggleCategoryStatus(category._id);
   }
@@ -12,7 +12,6 @@ function CategoryToggleStatus({ category }) {
       className="min-w-25.5"
       variant={category.isStatus ? "active" : ""}
       onClick={onSubmit}
-      disabled={loading}
     >
       {category.isStatus ? "Hoạt động" : "Đã Ẩn"}
     </Button>

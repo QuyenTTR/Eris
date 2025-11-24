@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import {
   Table,
   TableBody,
@@ -6,11 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CategoryDeleteForm from "@/components/category/category-deleteForm";
-import CategoryUpdateForm from "@/components/category/category-updateForm";
-import CategoryToggleStatus from "@/components/category/category-toggleStatus";
+import CategoryDeleteForm from "@/components/ui/category/delete-form";
+import CategoryUpdateForm from "@/components/ui/category/update-form";
+import CategoryToggleStatus from "@/components/ui/category/toggleStatus-button";
 
-function CategoryTable({ categories }) {
+import useCategoryStore from "@/stores/useCategory.store";
+
+function CategoryTable() {
+  const { getAllCategories, categories, loading } = useCategoryStore();
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
   return (
     <div className="mt-10 rounded-lg border-1 border-solid bg-white px-4 pb-4">
       <Table>
@@ -23,7 +33,7 @@ function CategoryTable({ categories }) {
             <TableHead>Thao Tác</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody disable={loading}>
           {categories.map((category, index) => (
             <TableRow key={category._id}>
               <TableCell>{index + 1}</TableCell>

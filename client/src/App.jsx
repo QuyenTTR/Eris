@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Toaster } from "@/components/ui/sonner";
 
-import routes from "./routes";
+import routes from "@/routes";
 
-import DefaultLayout from "./components/layouts/DefaultLayout";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+import DefaultLayout from "@/components/layouts/DefaultLayout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 function App() {
   return (

@@ -1,3 +1,4 @@
+import Loading from "@/pages/Loading";
 import useAuthStore from "@/stores/useAuth.store";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (loading || starting) {
-    return <div>Đang tải...</div>;
+    return <Loading />;
   }
 
   if (!accessToken) {

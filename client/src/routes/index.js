@@ -4,6 +4,7 @@ import Item from "@/pages/Item";
 import Product from "@/pages/Product";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import CategoryGroup from "@/pages/CategoryGroup";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
 
@@ -27,8 +28,8 @@ const routes = [
     public: true,
   },
   {
-    path: "/product",
-    component: Product,
+    path: "/product/category-group",
+    component: CategoryGroup,
   },
   {
     path: "/product/category",

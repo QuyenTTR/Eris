@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Table({ className, ...props }) {
+function Table({ className, disable, ...props }) {
   return (
     <div
       data-slot="table-container"
@@ -10,7 +10,11 @@ function Table({ className, ...props }) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn(
+          "w-full caption-bottom text-sm",
+          className,
+          disable && "pointer-events-none opacity-60",
+        )}
         {...props}
       />
     </div>
@@ -27,11 +31,15 @@ function TableHeader({ className, ...props }) {
   );
 }
 
-function TableBody({ className, ...props }) {
+function TableBody({ className, disable, ...props }) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0", className)}
+      className={cn(
+        "[&_tr:last-child]:border-0",
+        className,
+        disable && "pointer-events-none opacity-60",
+      )}
       {...props}
     />
   );

@@ -38,12 +38,16 @@ export function AppSidebar({ ...props }) {
 
         items: [
           {
-            title: "Mặt hàng",
-            url: "/product/item",
+            title: "Nhóm danh mục",
+            url: "/product/category-group",
           },
           {
             title: "Danh mục",
             url: "/product/category",
+          },
+          {
+            title: "Mặt hàng",
+            url: "/product/item",
           },
         ],
       },

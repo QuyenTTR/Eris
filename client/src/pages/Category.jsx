@@ -1,22 +1,13 @@
-import { useEffect } from "react";
-
 import Header from "@/components/ui/header";
-import CategoryCreateForm from "@/components/category/category-createForm";
-import CategoryTable from "@/components/category/category-table";
 
-import useCategoryStore from "@/stores/useCategory.store";
+import CategoryCreateForm from "@/components/ui/category/create-form";
+import CategoryTable from "@/components/ui/category/table";
 
 function Category() {
-  const { getAllCategories, categories } = useCategoryStore();
-
-  useEffect(() => {
-    getAllCategories();
-  }, []);
-
   return (
     <>
       <Header title="Danh mục" CreateButton={CategoryCreateForm}></Header>
-      <CategoryTable categories={categories}></CategoryTable>
+      <CategoryTable></CategoryTable>
     </>
   );
 }

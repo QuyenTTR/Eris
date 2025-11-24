@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SquarePen } from "lucide-react";
 
 import {
   Dialog,
@@ -14,37 +15,38 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { handleChange } from "@/lib/handleChange";
 import useCategoryStore from "@/stores/useCategory.store";
+import { handleChange } from "@/lib/handleChange";
 
-function CategoryCreateForm() {
-  const [newCategory, setNewCategory] = useState({
-    categoryName: "",
-    categoryDescription: "",
+function CategoryUpdateForm({ category }) {
+  const [editCategory, setEditCategory] = useState({
+    categoryName: category.name,
+    categoryDescription: category.description,
   });
   const [open, setOpen] = useState(false);
-  const { createCategory, loading } = useCategoryStore();
+  const { updateCategory, loading } = useCategoryStore();
 
   async function onSubmit() {
     const categoryData = {
-      name: newCategory.categoryName,
-      description: newCategory.categoryDescription,
+      name: editCategory.categoryName,
+      description: editCategory.categoryDescription,
     };
-    const success = await createCategory(categoryData);
+    const success = await updateCategory(category._id, categoryData);
     if (success) {
       setOpen(false);
-      setNewCategory({ categoryName: "", categoryDescription: "" });
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Thêm Danh Mục</Button>
+        <Button variant="info">
+          <SquarePen />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Thêm Danh Mục</DialogTitle>
+          <DialogTitle>Cập nhật danh mục</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4">
           <div className="grid gap-3">
@@ -53,8 +55,8 @@ function CategoryCreateForm() {
               id="categoryName"
               name="categoryName"
               placeholder="Nhập tên danh mục"
-              value={newCategory.name}
-              onChange={handleChange(setNewCategory)}
+              value={editCategory.categoryName}
+              onChange={handleChange(setEditCategory)}
             />
           </div>
           <div className="grid gap-3">
@@ -63,8 +65,8 @@ function CategoryCreateForm() {
               id="categoryDescription"
               name="categoryDescription"
               placeholder="Mô tả danh mục (Ô này không bắt buộc)"
-              value={newCategory.description}
-              onChange={handleChange(setNewCategory)}
+              value={editCategory.categoryDescription}
+              onChange={handleChange(setEditCategory)}
             />
           </div>
         </div>
@@ -73,7 +75,7 @@ function CategoryCreateForm() {
             <Button variant="outline">Hủy</Button>
           </DialogClose>
           <Button disabled={loading} onClick={onSubmit}>
-            Thêm mới
+            Cập nhật
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -81,4 +83,4 @@ function CategoryCreateForm() {
   );
 }
 
-export default CategoryCreateForm;
+export default CategoryUpdateForm;

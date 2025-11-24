@@ -26,15 +26,11 @@ class CategoryController {
 
   async update(req, res) {
     try {
-      const { name, isStatus, description } = req.body;
+      const data = req.body;
 
-      const updatedCategory = await Category.findByIdAndUpdate(
-        req.params.id,
-        { name, isStatus, description },
-        {
-          new: true,
-        }
-      );
+      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, data, {
+        new: true,
+      });
 
       if (!updatedCategory) {
         return res.status(404).json({ message: "Danh mục không tồn tại" });
