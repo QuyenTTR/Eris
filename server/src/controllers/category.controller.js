@@ -13,11 +13,10 @@ class CategoryController {
 
   async create(req, res) {
     try {
-      const { name, isStatus } = req.body;
+      const { name, isStatus, description } = req.body;
 
-      const newCategory = new Category({ name, isStatus });
+      const newCategory = new Category({ name, isStatus, description });
       await newCategory.save();
-
       res.status(201).json({ message: "Tạo danh mục thành công", category: newCategory });
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi tạo danh mục" });
@@ -27,11 +26,11 @@ class CategoryController {
 
   async update(req, res) {
     try {
-      const { name, isStatus } = req.body;
+      const { name, isStatus, description } = req.body;
 
       const updatedCategory = await Category.findByIdAndUpdate(
         req.params.id,
-        { name, isStatus },
+        { name, isStatus, description },
         {
           new: true,
         }

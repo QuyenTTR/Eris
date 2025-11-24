@@ -6,7 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import CategoryDeleteForm from "@/components/category/category-deleteForm";
+import CategoryUpdateForm from "@/components/category/category-updateForm";
+import CategoryToggleStatus from "./category-toggleStatus";
 
 function CategoryTable({ categories }) {
   return (
@@ -16,6 +18,7 @@ function CategoryTable({ categories }) {
           <TableRow>
             <TableHead>#</TableHead>
             <TableHead>Tên</TableHead>
+            <TableHead>Mô Tả</TableHead>
             <TableHead>Trạng Thái</TableHead>
             <TableHead>Thao Tác</TableHead>
           </TableRow>
@@ -24,15 +27,23 @@ function CategoryTable({ categories }) {
           {categories.map((category, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{category.name}</TableCell>
-              <TableCell>
-                {
-                  <Button variant={category.isStatus ? "info" : "warning"}>
-                    {category.isStatus ? "Hoạt động" : "Ẩn"}
-                  </Button>
-                }
+              <TableCell className="max-w-xs break-words whitespace-normal">
+                {category.name}
               </TableCell>
-              <TableCell></TableCell>
+              <TableCell className="max-w-xl break-words whitespace-normal">
+                {category.description ? (
+                  category.description
+                ) : (
+                  <p className="opacity-60">--Không có mô tả--</p>
+                )}
+              </TableCell>
+              <TableCell>
+                <CategoryToggleStatus category={category} />
+              </TableCell>
+              <TableCell className="space-x-2">
+                <CategoryUpdateForm category={category} />
+                <CategoryDeleteForm category={category} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

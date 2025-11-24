@@ -56,7 +56,7 @@ function LoginForm() {
               {...register("username")}
               type="text"
               placeholder="Nhập tên tài khoản để đăng nhập"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.username && (
@@ -82,7 +82,7 @@ function LoginForm() {
               {...register("password")}
               type="password"
               placeholder="Nhập mật khẩu của bạn"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.password && (
@@ -91,7 +91,11 @@ function LoginForm() {
             </p>
           )}
         </div>
-        <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
+        <Button
+          type="submit"
+          disabled={loading}
+          className="mt-4 h-11 w-full text-base"
+        >
           Đăng Nhập
         </Button>
       </form>
@@ -106,7 +110,7 @@ function LoginForm() {
       </div> */}
 
       <div className="mt-4 text-center">
-        <p className="mb-1 text-base">
+        <p className="mb-1 md:text-base">
           Chưa có tài khoản?{" "}
           <Link
             className="text-info font-medium hover:underline"

@@ -5,7 +5,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-base font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center hover:cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -15,6 +15,8 @@ const buttonVariants = cva(
         active: "bg-active text-active-foreground hover:brightness-90",
         success: "bg-success text-success-foreground hover:brightness-90",
         danger: "bg-danger text-danger-foreground hover:brightness-90",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         warning: "bg-warning text-warning-foreground hover:bg-warning/80",
         info: "bg-info text-info-foreground hover:brightness-90",
 
@@ -32,9 +34,9 @@ const buttonVariants = cva(
           "border border-warning bg-background text-warning shadow-xs hover:bg-warning hover:text-warning-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-info":
           "border border-info bg-background text-info shadow-xs hover:bg-info hover:text-info-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        "outline-destructive":
+          "border border-destructive bg-background text-destructive shadow-xs hover:bg-destructive hover:text-destructive-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
 
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",

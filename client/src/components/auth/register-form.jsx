@@ -71,7 +71,7 @@ function RegisterForm() {
               {...register("email")}
               type="email"
               placeholder="VD: example@company.com"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.email && (
@@ -96,7 +96,7 @@ function RegisterForm() {
               {...register("fullname")}
               type="text"
               placeholder="Nhập họ và tên của bạn"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.fullname && (
@@ -122,7 +122,7 @@ function RegisterForm() {
               {...register("username")}
               type="text"
               placeholder="Nhập tên tài khoản để đăng nhập"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.username && (
@@ -148,7 +148,7 @@ function RegisterForm() {
               {...register("password")}
               type="password"
               placeholder="Nhập mật khẩu của bạn"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.password && (
@@ -174,7 +174,7 @@ function RegisterForm() {
               {...register("confirmPassword")}
               type="password"
               placeholder="Nhập lại mật khẩu của bạn"
-              className="px-10"
+              className="selection:bg-info h-11 px-10 md:text-base"
             />
           </div>
           {errors.confirmPassword && (
@@ -183,7 +183,11 @@ function RegisterForm() {
             </p>
           )}
         </div>
-        <Button type="submit" disabled={loading} className="mt-4 h-11 w-full">
+        <Button
+          type="submit"
+          disabled={loading}
+          className="mt-4 h-11 w-full text-base"
+        >
           {loading ? (
             <LoaderCircle className="animate-spin" />
           ) : (
