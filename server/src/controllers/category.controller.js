@@ -1,39 +1,39 @@
 import Category from "../models/category.model.js";
+import ApiError from "../utils/apiError.js";
 
 class CategoryController {
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const categories = await Category.find().sort({ createdAt: -1 });
+
       res.status(200).json({ categories });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi lấy danh sách danh mục" });
-      console.error("Lỗi khi gọi getAll:", error);
+      next(error);
     }
   }
 
-  async create(req, res) {
+  async create(req, res, next) {
     try {
       const { name, isStatus, description } = req.body;
 
       const newCategory = new Category({ name, isStatus, description });
       await newCategory.save();
+
       res.status(201).json({ message: "Tạo danh mục thành công", category: newCategory });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi tạo danh mục" });
-      console.error("Lỗi khi gọi create:", error);
+      next(error);
     }
   }
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       const data = req.body;
 
       const updatedCategory = await Category.findByIdAndUpdate(req.params.id, data, {
         new: true,
       });
-
       if (!updatedCategory) {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
+        throw new ApiError(404, "Danh mục không tồn tại");
       }
 
       res.status(200).json({
@@ -41,17 +41,15 @@ class CategoryController {
         category: updatedCategory,
       });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi cập nhật danh mục" });
-      console.error("Lỗi khi gọi update:", error);
+      next(error);
     }
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     try {
       const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-
       if (!deletedCategory) {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
+        throw new ApiError(404, "Danh mục không tồn tại");
       }
 
       res.status(200).json({
@@ -59,8 +57,7 @@ class CategoryController {
         category: deletedCategory,
       });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi xóa danh mục" });
-      console.error("Lỗi khi gọi delete:", error);
+      next(error);
     }
   }
 }

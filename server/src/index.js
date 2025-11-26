@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import routes from "./routes/index.js";
 import connectDB from "./config/db.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
 
 dotenv.config();
 
@@ -22,10 +23,7 @@ app.use(cookieParser());
 
 app.use("/api", routes);
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Lỗi hệ thống!" });
-});
+app.use(errorHandler);
 
 connectDB()
   .then(() => {

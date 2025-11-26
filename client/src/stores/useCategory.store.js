@@ -58,15 +58,7 @@ const useCategoryStore = create((set, get) => ({
   toggleCategoryStatus: async (id) => {
     set({ loading: true });
     try {
-      const category = get().categories.find((category) => category._id === id);
-      if (!category) {
-        throw new Error("Danh mục không tồn tại");
-      }
-      const newStatus = !category.isStatus * 1;
-      await categoryService.update(id, {
-        ...category,
-        isStatus: newStatus,
-      });
+      const { message } = await categoryService.toggleStatus(id);
       get().getAllCategories();
 
       toast.success("Cập nhật trạng thái thành công");

@@ -1,39 +1,39 @@
 import CategoryGroup from "../models/categoryGroup.model.js";
+import ApiError from "../utils/apiError.js";
 
 class CategoryGroupController {
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const categoryGroups = await CategoryGroup.find().sort({ createdAt: -1 });
+
       res.status(200).json({ categoryGroups });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi lấy danh sách nhóm danh mục" });
-      console.error("Lỗi khi gọi getAll:", error);
+      next(error);
     }
   }
 
-  async create(req, res) {
+  async create(req, res, next) {
     try {
       const { name, isStatus, description } = req.body;
+
       const newCategoryGroup = new CategoryGroup({ name, isStatus, description });
       await newCategoryGroup.save();
 
       res.status(201).json({ message: "Tạo nhóm danh mục thành công", newCategoryGroup });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi tạo nhóm danh mục" });
-      console.error("Lỗi khi gọi create:", error);
+      next(error);
     }
   }
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       const data = req.body;
 
       const updatedCategoryGroup = await CategoryGroup.findByIdAndUpdate(req.params.id, data, {
         new: true,
       });
-
       if (!updatedCategoryGroup) {
-        return res.status(404).json({ message: "Nhóm danh mục không tồn tại" });
+        throw new ApiError(404, "Nhóm danh mục không tồn tại");
       }
 
       res.status(200).json({
@@ -41,24 +41,41 @@ class CategoryGroupController {
         categoryGroup: updatedCategoryGroup,
       });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi cập nhật nhóm danh mục" });
-      console.error("Lỗi khi gọi update:", error);
+      next(error);
     }
   }
 
-  async delete(req, res) {
+  async toggleStatus(req, res, next) {
+    try {
+      const { id } = req.params;
+      const categoryGroup = await CategoryGroup.findById(id);
+      if (!categoryGroup) {
+        throw new ApiError(404, "Nhóm danh mục không tồn tại");
+      }
+      categoryGroup.isStatus = !categoryGroup.isStatus * 1;
+      await categoryGroup.save();
+      res.status(200).json({
+        message: "Cập nhật trạng thái nhóm danh mục thành công",
+        categoryGroup,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async delete(req, res, next) {
     try {
       const deletedCategoryGroup = await CategoryGroup.findByIdAndDelete(req.params.id);
       if (!deletedCategoryGroup) {
-        return res.status(404).json({ message: "Nhóm danh mục không tồn tại" });
+        throw new ApiError(404, "Nhóm danh mục không tồn tại");
       }
+
       res.status(200).json({
         message: "Xóa nhóm danh mục thành công",
         categoryGroup: deletedCategoryGroup,
       });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi xóa nhóm danh mục" });
-      console.error("Lỗi khi gọi delete:", error);
+      next(error);
     }
   }
 }

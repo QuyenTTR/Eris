@@ -3,37 +3,37 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
 import Session from "../models/session.model.js";
+import ApiError from "../utils/apiError.js";
 
 const ACCESS_TOKEN_EXPIRES_IN = "10m";
 const REFRESH_TOKEN_EXPIRES_IN = 30 * 24 * 60 * 60 * 1000;
 
 class AuthController {
-  async register(req, res) {
+  async register(req, res, next) {
     try {
       const { fullname, email, username, password } = req.body;
 
       const hasEmail = await User.findOne({ email });
       if (hasEmail) {
-        return res.status(400).json({ message: "Email đã tồn tại" });
+        throw new ApiError(400, "Email đã tồn tại");
       }
 
       const hasUsername = await User.findOne({ username });
       if (hasUsername) {
-        return res.status(400).json({ message: "Tên đăng nhập đã tồn tại" });
+        throw new ApiError(400, "Tên đăng nhập đã tồn tại");
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = new User({ fullname, email, username, hashedPassword });
       await user.save();
 
-      res.status(201).json({ message: "Đăng ký thành công", user });
+      res.status(201).json({ message: "Đăng ký thành công" });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi đăng ký" });
-      console.error("Lỗi khi gọi signUp:", error);
+      next(error);
     }
   }
 
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const { login, password } = req.body;
 
@@ -41,12 +41,12 @@ class AuthController {
         $or: [{ username: login }, { email: login }],
       });
       if (!user) {
-        return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
+        throw new ApiError(401, "Tên đăng nhập hoặc mật khẩu không chính xác");
       }
 
       const isMatch = await bcrypt.compare(password, user.hashedPassword);
       if (!isMatch) {
-        return res.status(401).json({ message: "Tên đăng nhập hoặc mật khẩu chính xác" });
+        throw new ApiError(401, "Tên đăng nhập hoặc mật khẩu không chính xác");
       }
 
       const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_SECRET, {
@@ -70,17 +70,13 @@ class AuthController {
         maxAge: REFRESH_TOKEN_EXPIRES_IN,
       });
 
-      res.status(200).json({
-        message: "Đăng nhập thành công",
-        accessToken,
-      });
+      res.status(200).json({ message: "Đăng nhập thành công", accessToken });
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi đăng nhập" });
-      console.error("Lỗi khi gọi signIn:", error);
+      next(error);
     }
   }
 
-  async logout(req, res) {
+  async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       if (refreshToken) {
@@ -90,26 +86,25 @@ class AuthController {
 
       res.sendStatus(204);
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi đăng xuất" });
-      console.error("Lỗi khi gọi signOut:", error);
+      next(error);
     }
   }
 
-  async refreshToken(req, res) {
+  async refreshToken(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       if (!refreshToken) {
-        return res.status(401).json({ message: "Không có refresh token" });
+        throw new ApiError(401, "Không có refresh token");
       }
       const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 
       const session = await Session.findOne({ refreshToken });
       if (!session) {
-        return res.status(401).json({ message: "Phiên không hợp lệ" });
+        throw new ApiError(401, "Phiên không hợp lệ");
       }
 
       if (session.expiresAt < new Date()) {
-        return res.status(401).json({ message: "Phiên đã hết hạn, vui lòng đăng nhập lại" });
+        throw new ApiError(401, "Phiên đã hết hạn");
       }
 
       const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_SECRET, {
@@ -118,11 +113,13 @@ class AuthController {
 
       res.status(200).json({ accessToken });
     } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
-        return res.status(401).json({ message: "Phiên không hợp lệ" });
+      if (error instanceof jwt.JsonWebTokenError) {
+        return next(new ApiError(401, "Phiên không hợp lệ"));
       }
-      res.status(500).json({ message: "Lỗi khi làm mới token" });
-      console.error("Lỗi khi gọi refreshToken:", error);
+      if (error instanceof jwt.TokenExpiredError) {
+        return next(new ApiError(401, "Phiên đã hết hạn"));
+      }
+      next(error);
     }
   }
 }

@@ -7,7 +7,7 @@ function Category() {
   return (
     <>
       <Header title="Danh mục" CreateButton={CategoryCreateForm}></Header>
-      <CategoryTable></CategoryTable>
+      <CategoryTable />
     </>
   );
 }

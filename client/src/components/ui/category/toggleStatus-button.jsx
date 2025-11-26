@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import useCategoryStore from "@/stores/useCategory.store";
 
 function CategoryToggleStatus({ category }) {
-  const { toggleCategoryStatus } = useCategoryStore.getState();
+  const { toggleCategoryStatus } = useCategoryStore();
   function onSubmit() {
     toggleCategoryStatus(category._id);
   }

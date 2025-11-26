@@ -10,6 +10,7 @@ const router = express.Router();
 router.get("/", CategoryGroupController.getAll);
 router.post("/", validate(categoryGroupValidation.create), CategoryGroupController.create);
 router.put("/:id", validate(categoryGroupValidation.update), CategoryGroupController.update);
+router.patch("/:id/toggle-status", CategoryGroupController.toggleStatus);
 router.delete("/:id", CategoryGroupController.delete);
 
 export default router;
