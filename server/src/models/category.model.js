@@ -10,15 +10,25 @@ const Category = new Schema(
       trim: true,
       maxlength: 100,
     },
-    isStatus: {
-      type: Number,
-      default: 0,
-    },
     description: {
       type: String,
       trim: true,
       maxlength: 500,
       default: "",
+    },
+    colorHex: {
+      type: String,
+      trim: true,
+      maxlength: 7,
+      default: "",
+    },
+    isStatus: {
+      type: Number,
+      default: 0,
+    },
+    categoryGroupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CategoryGroup",
     },
   },
   {

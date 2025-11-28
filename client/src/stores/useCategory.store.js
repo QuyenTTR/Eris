@@ -61,7 +61,7 @@ const useCategoryStore = create((set, get) => ({
       const { message } = await categoryService.toggleStatus(id);
       get().getAllCategories();
 
-      toast.success("Cập nhật trạng thái thành công");
+      toast.success(message);
       return true;
     } catch (error) {
       toast.error(

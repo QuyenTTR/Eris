@@ -15,7 +15,7 @@ import CategoryToggleStatus from "@/components/ui/category/toggleStatus-button";
 import useCategoryStore from "@/stores/useCategory.store";
 
 function CategoryTable() {
-  const { getAllCategories, categories, loading } = useCategoryStore();
+  const { getAllCategories, categories } = useCategoryStore();
 
   useEffect(() => {
     getAllCategories();
@@ -29,11 +29,13 @@ function CategoryTable() {
             <TableHead>#</TableHead>
             <TableHead>Tên</TableHead>
             <TableHead>Mô Tả</TableHead>
+            <TableHead>Màu</TableHead>
+            <TableHead>Thuộc nhóm</TableHead>
             <TableHead>Trạng Thái</TableHead>
             <TableHead>Thao Tác</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody disable={loading}>
+        <TableBody>
           {categories.map((category, index) => (
             <TableRow key={category._id}>
               <TableCell>{index + 1}</TableCell>
@@ -47,6 +49,17 @@ function CategoryTable() {
                   <p className="opacity-60">--Không có mô tả--</p>
                 )}
               </TableCell>
+              <TableCell>
+                {category.colorHex ? (
+                  <div
+                    className="h-6 w-6 rounded-full border"
+                    style={{ backgroundColor: category.colorHex }}
+                  />
+                ) : (
+                  <p className="opacity-60">--Không có màu--</p>
+                )}
+              </TableCell>
+              <TableCell>{category.categoryGroupId.name}</TableCell>
               <TableCell>
                 <CategoryToggleStatus category={category} />
               </TableCell>

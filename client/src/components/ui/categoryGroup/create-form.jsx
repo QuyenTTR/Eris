@@ -63,13 +63,18 @@ function CategoryGroupCreateForm() {
           </div>
           <div className="grid gap-3">
             <Label htmlFor="categoryGroupDescription">Mô tả</Label>
-            <Textarea
-              id="categoryGroupDescription"
-              name="categoryGroupDescription"
-              placeholder="Mô tả nhóm danh mục (Ô này không bắt buộc)"
-              value={newCategoryGroup.categoryGroupDescription}
-              onChange={handleChange(setNewCategoryGroup)}
-            />
+            <div>
+              <Textarea
+                id="categoryGroupDescription"
+                name="categoryGroupDescription"
+                placeholder="Mô tả nhóm danh mục (Ô này không bắt buộc)"
+                value={newCategoryGroup.categoryGroupDescription}
+                onChange={handleChange(setNewCategoryGroup)}
+              />
+              <p className="mb-1 text-sm text-black/70">
+                Dòng này sẽ hiển thị khi người dùng di chuột vào nhóm danh mục
+              </p>
+            </div>
           </div>
         </div>
         <DialogFooter>

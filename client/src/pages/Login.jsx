@@ -1,10 +1,13 @@
 import LoginForm from "@/components/ui/auth/login-form";
 
-function Login() {
+function Login({ title }) {
   return (
-    <div>
+    <>
+      <h1 className="text-center text-3xl font-medium text-slate-900">
+        {title}
+      </h1>
       <LoginForm />
-    </div>
+    </>
   );
 }
 

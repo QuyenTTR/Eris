@@ -3,12 +3,16 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/apiError.js";
 
 function errorHandler(err, req, res, next) {
-  console.error("-----------------------------------------------------------------------------------------------------\n🔥 Lỗi:", err);
-
   // Nếu là lỗi ApiError
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
       message: err.message,
+    });
+  }
+  // Lỗi CastError của Mongoose
+  if (err.name === "CastError" && err.kind === "ObjectId") {
+    return res.status(400).json({
+      message: "ID không hợp lệ",
     });
   }
 
@@ -38,6 +42,9 @@ function errorHandler(err, req, res, next) {
   }
 
   // Lỗi không xác định
+  console.error("-----------------------------------------------------------------------------------------------------\n");
+  console.error("🔥🔥🔥🔥🔥🔥 Lỗi server:", err);
+
   return res.status(500).json({
     message: err.message || "Lỗi hệ thống",
   });

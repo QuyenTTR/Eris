@@ -15,8 +15,7 @@ import CategoryGroupUpdateForm from "@/components/ui/categoryGroup/update-form";
 import CategoryGroupToggleStatus from "@/components/ui/categoryGroup/toggleStatus-button";
 
 function CategoryGroupTable() {
-  const { categoryGroups, loading, getAllCategoryGroups } =
-    useCategoryGroupStore();
+  const { categoryGroups, getAllCategoryGroups } = useCategoryGroupStore();
 
   useEffect(() => {
     getAllCategoryGroups();
@@ -34,7 +33,7 @@ function CategoryGroupTable() {
             <TableHead>Thao Tác</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody disable={loading}>
+        <TableBody>
           {categoryGroups.map((categoryGroup, index) => (
             <TableRow key={categoryGroup._id}>
               <TableCell>{index + 1}</TableCell>

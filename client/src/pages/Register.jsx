@@ -1,10 +1,13 @@
 import RegisterForm from "@/components/ui/auth/register-form";
 
-function Register() {
+function Register({ title }) {
   return (
-    <div>
+    <>
+      <h1 className="text-center text-3xl font-medium text-slate-900">
+        {title}
+      </h1>
       <RegisterForm />
-    </div>
+    </>
   );
 }
 

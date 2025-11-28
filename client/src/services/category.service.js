@@ -5,6 +5,8 @@ const categoryService = {
   getAll: () => api.get("/categories").then((res) => res.data),
   update: (id, data) =>
     api.put(`/categories/${id}`, data).then((res) => res.data),
+  toggleStatus: (id) =>
+    api.patch(`/categories/${id}/toggle-status`).then((res) => res.data),
   delete: (id) => api.delete(`/categories/${id}`).then((res) => res.data),
 };
 

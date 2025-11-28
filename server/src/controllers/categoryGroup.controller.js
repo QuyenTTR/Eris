@@ -1,4 +1,6 @@
 import CategoryGroup from "../models/categoryGroup.model.js";
+import Category from "../models/category.model.js";
+
 import ApiError from "../utils/apiError.js";
 
 class CategoryGroupController {
@@ -55,7 +57,7 @@ class CategoryGroupController {
       categoryGroup.isStatus = !categoryGroup.isStatus * 1;
       await categoryGroup.save();
       res.status(200).json({
-        message: "Cập nhật trạng thái nhóm danh mục thành công",
+        message: "Cập nhật trạng thái thành công",
         categoryGroup,
       });
     } catch (error) {
@@ -68,6 +70,10 @@ class CategoryGroupController {
       const deletedCategoryGroup = await CategoryGroup.findByIdAndDelete(req.params.id);
       if (!deletedCategoryGroup) {
         throw new ApiError(404, "Nhóm danh mục không tồn tại");
+      }
+      const hasCategories = await Category.findOne({ categoryGroupId: req.params.id });
+      if (hasCategories) {
+        throw new ApiError(400, "Nhóm danh mục đang được sử dụng, không thể xóa");
       }
 
       res.status(200).json({

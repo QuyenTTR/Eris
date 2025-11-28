@@ -59,6 +59,21 @@ function CategoryCreateForm() {
           </div>
           <div className="grid gap-3">
             <Label htmlFor="categoryDescription">Mô tả</Label>
+            <div>
+              <Textarea
+                id="categoryDescription"
+                name="categoryDescription"
+                placeholder="Mô tả danh mục (Ô này không bắt buộc)"
+                value={newCategory.description}
+                onChange={handleChange(setNewCategory)}
+              />
+              <p className="mb-1 text-sm text-black/70">
+                Dòng này sẽ hiển thị khi người dùng di chuột vào danh mục
+              </p>
+            </div>
+          </div>
+          <div className="grid gap-3">
+            <Label htmlFor="categoryDescription">Mô tả</Label>
             <Textarea
               id="categoryDescription"
               name="categoryDescription"

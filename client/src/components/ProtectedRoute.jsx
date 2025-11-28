@@ -1,9 +1,9 @@
 import Loading from "@/pages/Loading";
 import useAuthStore from "@/stores/useAuth.store";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const { accessToken, refresh, user, loading, getMe } = useAuthStore();
   const [starting, setStarting] = useState(true);
 
@@ -29,7 +29,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

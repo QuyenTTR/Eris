@@ -1,10 +1,12 @@
 import Category from "../models/category.model.js";
+import CategoryGroup from "../models/categoryGroup.model.js";
+
 import ApiError from "../utils/apiError.js";
 
 class CategoryController {
   async getAll(req, res, next) {
     try {
-      const categories = await Category.find().sort({ createdAt: -1 });
+      const categories = await Category.find().sort({ createdAt: -1 }).populate("categoryGroupId", "name");
 
       res.status(200).json({ categories });
     } catch (error) {
@@ -14,9 +16,14 @@ class CategoryController {
 
   async create(req, res, next) {
     try {
-      const { name, isStatus, description } = req.body;
+      const { name, isStatus, description, colorHex, categoryGroupId } = req.body;
 
-      const newCategory = new Category({ name, isStatus, description });
+      const categoryGroup = await CategoryGroup.findById(categoryGroupId);
+      if (!categoryGroup) {
+        throw new ApiError(404, "Nhóm danh mục không tồn tại");
+      }
+
+      const newCategory = new Category({ name, isStatus, description, colorHex, categoryGroupId });
       await newCategory.save();
 
       res.status(201).json({ message: "Tạo danh mục thành công", category: newCategory });
@@ -28,6 +35,14 @@ class CategoryController {
   async update(req, res, next) {
     try {
       const data = req.body;
+      const { categoryGroupId } = data;
+
+      if (categoryGroupId) {
+        const categoryGroup = await CategoryGroup.findById(categoryGroupId);
+        if (!categoryGroup) {
+          throw new ApiError(404, "Nhóm danh mục không tồn tại");
+        }
+      }
 
       const updatedCategory = await Category.findByIdAndUpdate(req.params.id, data, {
         new: true,

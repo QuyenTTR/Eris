@@ -3,10 +3,10 @@ import Header from "@/components/ui/header";
 import CategoryCreateForm from "@/components/ui/category/create-form";
 import CategoryTable from "@/components/ui/category/table";
 
-function Category() {
+function Category({ title }) {
   return (
     <>
-      <Header title="Danh mục" CreateButton={CategoryCreateForm}></Header>
+      <Header title={title} CreateButton={CategoryCreateForm}></Header>
       <CategoryTable />
     </>
   );

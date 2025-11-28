@@ -10,15 +10,10 @@ const useAuthStore = create((set, get) => ({
 
   clearState: () => set({ user: null, accessToken: null, loading: false }),
 
-  registerUser: async ({ fullname, email, username, password }) => {
+  registerUser: async (data) => {
     set({ loading: true });
     try {
-      const { message } = await authService.register({
-        fullname,
-        email,
-        username,
-        password,
-      });
+      const { message } = await authService.register(data);
       toast.success(message);
       return true;
     } catch (error) {
@@ -32,13 +27,10 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  loginUser: async ({ login, password }) => {
+  loginUser: async (data) => {
     set({ loading: true });
     try {
-      const { accessToken } = await authService.login({
-        login,
-        password,
-      });
+      const { accessToken } = await authService.login(data);
       set({ accessToken });
       await get().getMe();
       toast.success("Đăng nhập thành công");
