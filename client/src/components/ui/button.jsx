@@ -21,21 +21,21 @@ const buttonVariants = cva(
         info: "bg-info text-info-foreground hover:brightness-90",
 
         outline:
-          "border bg-background shadow-xs hover:bg-primary hover:text-primary-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border shadow-xs hover:bg-primary hover:text-primary-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-secondary":
-          "border border-secondary bg-background text-secondary shadow-xs hover:bg-secondary hover:text-secondary-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-secondary text-secondary shadow-xs hover:bg-secondary hover:text-secondary-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-active":
-          "border border-active bg-background text-active shadow-xs hover:bg-active hover:text-active-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-active text-active shadow-xs hover:bg-active hover:text-active-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-success":
-          "border border-success bg-background text-success shadow-xs hover:bg-success hover:text-success-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-success text-success shadow-xs hover:bg-success hover:text-success-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-danger":
-          "border border-danger bg-background text-danger shadow-xs hover:bg-danger hover:text-danger-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-danger text-danger shadow-xs hover:bg-danger hover:text-danger-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-warning":
-          "border border-warning bg-background text-warning shadow-xs hover:bg-warning hover:text-warning-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-warning text-warning shadow-xs hover:bg-warning hover:text-warning-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-info":
-          "border border-info bg-background text-info shadow-xs hover:bg-info hover:text-info-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-info text-info shadow-xs hover:bg-info hover:text-info-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-destructive":
-          "border border-destructive bg-background text-destructive shadow-xs hover:bg-destructive hover:text-destructive-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-destructive text-destructive shadow-xs hover:bg-destructive hover:text-destructive-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
 
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",

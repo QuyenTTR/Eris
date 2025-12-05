@@ -30,7 +30,6 @@ function CategoryTable() {
             <TableHead>Tên</TableHead>
             <TableHead>Mô Tả</TableHead>
             <TableHead>Màu</TableHead>
-            <TableHead>Thuộc nhóm</TableHead>
             <TableHead>Trạng Thái</TableHead>
             <TableHead>Thao Tác</TableHead>
           </TableRow>
@@ -43,9 +42,7 @@ function CategoryTable() {
                 {category.name}
               </TableCell>
               <TableCell className="max-w-xl break-words whitespace-normal">
-                {category.description ? (
-                  category.description
-                ) : (
+                {category.description || (
                   <p className="opacity-60">--Không có mô tả--</p>
                 )}
               </TableCell>
@@ -59,7 +56,6 @@ function CategoryTable() {
                   <p className="opacity-60">--Không có màu--</p>
                 )}
               </TableCell>
-              <TableCell>{category.categoryGroupId.name}</TableCell>
               <TableCell>
                 <CategoryToggleStatus category={category} />
               </TableCell>

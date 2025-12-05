@@ -1,5 +1,13 @@
 function handleChange(setState) {
-  return (e) => {
+  return (e, fieldName) => {
+    if (fieldName) {
+      setState((prev) => ({
+        ...prev,
+        [fieldName]: e,
+      }));
+      return;
+    }
+
     const { name, value } = e.target;
 
     setState((prev) => ({

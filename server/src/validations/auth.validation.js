@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const signUp = z
   .object({
-    fullname: z.string().trim().min(1, "Tên không được để trống").max(100),
+    fullname: z.string().trim().min(1, "Vui lòng nhập tên").max(100),
     email: z.string().trim().email("Vui lòng nhập email hợp lệ").max(100),
     username: z
       .string()
@@ -18,7 +18,7 @@ const signIn = z
     login: z
       .string()
       .trim()
-      .min(1, "Tên đăng nhập không được để trống")
+      .min(1, "Vui lòng nhập tên đăng nhập hoặc email")
       .max(100)
       .regex(/^[^\s]+$/),
     password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự").max(100),

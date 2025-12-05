@@ -28,7 +28,7 @@ function CategoryDeleteForm({ category }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="outline">
           <Trash2 />
         </Button>
       </DialogTrigger>

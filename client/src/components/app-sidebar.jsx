@@ -33,17 +33,13 @@ export function AppSidebar({ ...props }) {
     },
     navMain: [
       {
-        title: "Sản phẩm",
+        title: "Thực đơn",
         icon: Archive,
 
         items: [
           {
-            title: "Nhóm danh mục",
-            url: "/products/category-groups",
-          },
-          {
             title: "Danh mục",
-            url: "/products/categories",
+            url: "/categories",
           },
         ],
       },

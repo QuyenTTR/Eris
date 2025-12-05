@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const Category = new Schema(
+const Product = new Schema(
   {
     name: {
       type: String,
@@ -16,15 +16,31 @@ const Category = new Schema(
       maxlength: 500,
       default: "",
     },
-    colorHex: {
+    imageUrl: {
       type: String,
       trim: true,
-      maxlength: 7,
-      default: "",
+      maxlength: 500,
+      required: true,
     },
     isStatus: {
       type: Number,
       default: 0,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    unit: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100,
+    },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
     },
   },
   {
@@ -32,6 +48,6 @@ const Category = new Schema(
   }
 );
 
-const model = mongoose.model("Category", Category);
+const model = mongoose.model("Product", Product);
 
 export default model;
